@@ -39,7 +39,6 @@
   
   
   .voicelink {
-      text-shadow: 1px 1px 1px #333;
       color: #333;
   }
   .voicelink : hover {
@@ -376,21 +375,33 @@
             workInfo.rj = rj;
             let rj_group;
 
-
-            if (rj.length === 8) {
-                if (rj.slice(5) == "000")
-                    rj_group = rj;
-                else {
-                    rj_group = (parseInt(rj.slice(2, 5)) + 1).toString() + "000";
-                    rj_group = "RJ" + ("000000" + rj_group).substring(rj_group.length);
+            try{
+                let imageDom = dom.querySelector(".product-slider picture img")
+                workInfo.img = "https:"+ imageDom.getAttribute('srcset')
+            }catch (e){
+                
+                if (rj.length === 8) {
+                    if (rj.slice(5) == "000")
+                        rj_group = rj;
+                    else {
+                        rj_group = (parseInt(rj.slice(2, 5)) + 1).toString() + "000";
+                        rj_group = "RJ" + ("000000" + rj_group).substring(rj_group.length);
+                    }
+    
+                    workInfo.img = "https://img.dlsite.jp/modpub/images2/work/doujin/" + rj_group + "/" + rj + "_img_main.jpg";
+                } else if (rj.length === 10) {
+                    let rj_base = rj.slice(0, 6)
+                    let rj_tail = parseInt(rj.slice(6,7))+1
+                    workInfo.img = "https://img.dlsite.jp/modpub/images2/work/doujin/" + rj_base+rj_tail + "000" + "/" + rj + "_img_main.jpg";
+    
+    
                 }
-
-                workInfo.img = "https://img.dlsite.jp/modpub/images2/work/doujin/" + rj_group + "/" + rj + "_img_main.jpg";
-            } else if (rj.length === 10) {
-                workInfo.img = "https://img.dlsite.jp/modpub/images2/work/doujin/" + rj.slice(0, 6) + "5000" + "/" + rj + "_img_main.jpg";
-
+            }finally{
 
             }
+
+            
+
 
             workInfo.title = dom.getElementById("work_name").innerText.trim();
             workInfo.circle = dom.querySelector("span.maker_name").innerText.trim();
